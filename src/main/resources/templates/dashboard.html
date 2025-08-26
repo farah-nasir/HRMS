@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1 th:text="'Welcome, ' + ${username}"></h1>
+    <p th:text="'Your role: ' + ${role}"></p>
+
+    <a th:href="@{/logout}">
+        <button style="background-color:red; color:white;">Logout</button>
+    </a>
+</body>
+</html>
