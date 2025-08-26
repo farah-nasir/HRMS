@@ -6,6 +6,33 @@
 <body>
     <h1 th:text="'Welcome, ' + ${username}"></h1>
     <p th:text="'Your role: ' + ${role}"></p>
+    
+   <div th:switch="${role}">
+        <!-- Admin -->
+        <div th:case="'ROLE_ADMIN'">
+            <h3>Admin Dashboard</h3>
+            <a href="/departments">Department Management</a><br>
+            <a href="/users">User Maintenance</a>
+        </div>
+
+        <!-- Manager -->
+        <div th:case="'ROLE_MANAGER'">
+            <h3>Manager Dashboard</h3>
+            <a href="/leave/list">Leave Application Listing</a>
+        </div>
+
+        <!-- Employee -->
+        <div th:case="'ROLE_EMPLOYEE'">
+            <h3>Employee Dashboard</h3>
+            <a href="/leave/apply">Apply for Leave</a><br>
+            <a href="/leave/my">My Leave Applications</a>
+        </div>
+
+        <!-- Default (if role not matched) -->
+        <div th:case="*">
+            <p>No role assigned</p>
+        </div>
+    </div>
 
     <a th:href="@{/logout}">
         <button style="background-color:red; color:white;">Logout</button>

@@ -13,7 +13,10 @@ public class SecurityConfig {
         http
             .csrf().disable() //disable csrf for simplicity
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/dashboard", "/css/**", "/js/**").permitAll() // allow login page
+               .requestMatchers("/users/**", "/departments/**").hasRole("ADMIN")
+                .requestMatchers("/leave/list").hasRole("MANAGER")
+                .requestMatchers("/leave/apply", "/leave/my").hasRole("EMPLOYEE")
+                .requestMatchers("/dashboard", "/login", "/logout").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin().disable();
