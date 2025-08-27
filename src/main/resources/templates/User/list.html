@@ -1,0 +1,19 @@
+<h1>User List</h1>
+<a th:href="@{/User/new}">Add New User</a>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Actions</th>
+    </tr>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.role.name}"></td>
+        <td>
+            <a th:href="@{/User/edit/{id}(id=${user.id})}">Edit</a>
+            <a th:href="@{/User/delete/{id}(id=${user.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+        </td>
+    </tr>
+</table>

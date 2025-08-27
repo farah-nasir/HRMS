@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2 th:text="${user.id == null} ? 'Add user' : 'Edit user'"></h2>
+    <form th:action="@{/User}" th:object="${user}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <label for="username">Username:</label>
+        <input type="text" th:field="*{username}" required /><br/>
+
+        <label for="password">Password:</label>
+        <input type="password" th:field="*{password}" placeholder="Leave empty to keep current password"/><br/>
+
+        <label for="role">Role:</label>
+       <select th:field="*{role.id}">
+            <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
+        </select>
+
+        <button type="submit">Save</button>
+    </form>
+<a th:href="@{/User}">Back to List</a>
+</body>
+</html>

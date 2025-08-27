@@ -93,27 +93,27 @@ public class AuthController {
         return "dashboard";
     }
 
-    @GetMapping("/users")
-    public String usersPage(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    // @GetMapping("/users")
+    // public String usersPage(Model model) {
+    //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
-            return "redirect:/login";
-        }
+    //     if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+    //         return "redirect:/login";
+    //     }
 
-        // Restrict access to admins only
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+    //     // Restrict access to admins only
+    //     boolean isAdmin = authentication.getAuthorities().stream()
+    //             .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
 
-        if (!isAdmin) {
-            return "error/403"; //TODO Make templates/error/403.html
-        }
+    //     if (!isAdmin) {
+    //         return "error/403"; //TODO Make templates/error/403.html
+    //     }
 
-        List<User> users = userService.getAllUsers();
-        model.addAttribute("users", users);
+    //     List<User> users = userService.getAllUsers();
+    //     model.addAttribute("users", users);
 
-        return "users";
-    }
+    //     return "users";
+    // }
 
     // @GetMapping("/departments")
     // public String departmentsPage(Model model) {
