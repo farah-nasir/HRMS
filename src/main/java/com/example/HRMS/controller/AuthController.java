@@ -115,12 +115,12 @@ public class AuthController {
         return "users";
     }
 
-    @GetMapping("/departments")
-    public String departmentsPage(Model model) {
-        // You can add attributes to the model if needed
-        // e.g., model.addAttribute("departments", departmentService.getAllDepartments());
-        return "departments"; // maps to templates/departments.html
-    }
+    // @GetMapping("/departments")
+    // public String departmentsPage(Model model) {
+    //     // You can add attributes to the model if needed
+    //     // e.g., model.addAttribute("departments", departmentService.getAllDepartments());
+    //     return "departments"; // maps to templates/departments.html
+    // }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
