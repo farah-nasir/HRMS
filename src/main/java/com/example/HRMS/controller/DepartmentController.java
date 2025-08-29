@@ -6,6 +6,9 @@ import com.example.HRMS.repository.DepartmentRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+
 
 @Controller
 @RequestMapping("/Department")
@@ -21,26 +24,30 @@ public class DepartmentController {
         this.departmentService = departmentService;
     }
 
-
     // List all departments
     @GetMapping
-    public String listDepartments(Model model) {
-        model.addAttribute("departments", departmentService.getAllDepartments());
-        return "Department/list"; // lowercase folder
+    public String listDepartments(Model model, 
+            @AuthenticationPrincipal User userDetails ) {
+        model.addAttribute("departments", departmentRepository.findByStatus("Active"));
+        model.addAttribute("username", userDetails.getUsername()); // Now this works
+        return "Department/list";
     }
 
     // Show form to add department
     @GetMapping("/new")
-    public String showCreateForm(Model model) {
-        model.addAttribute("department", new Department()); // singular entity
+    public String showCreateForm(
+            Model model, 
+            @AuthenticationPrincipal User userDetails) { // Inject currently logged-in user
+        model.addAttribute("department", new Department());
+        model.addAttribute("username", userDetails.getUsername()); // Now this works
         return "Department/form";
     }
 
-      // Handle save
+    // Handle save
     @PostMapping
     public String saveDepartment(@ModelAttribute("department") Department department) {
         departmentRepository.save(department);
-        return "redirect:/Department"; // after save, redirect to list
+        return "redirect:/Department";
     }
 
     // Show form to edit department
@@ -56,7 +63,8 @@ public class DepartmentController {
     @GetMapping("/delete/{id}")
     public String deleteDepartment(@PathVariable Long id) {
         departmentService.deleteDepartment(id);
-        return "redirect:/Department"; // after delete, redirect to list
+        return "redirect:/Department"; 
     }
+
 }
 

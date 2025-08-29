@@ -1,16 +1,120 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HRMS Login</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e0e5ec;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .login-card {
+            background: #e0e5ec;
+            border-radius: 20px;
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 8px 8px 15px #a3b1c6, -8px -8px 15px #ffffff;
+        }
+
+        .login-card h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            border: none;
+            background: #e0e5ec;
+            box-shadow: inset 6px 6px 8px #a3b1c6,
+                        inset -6px -6px 8px #ffffff;
+            color: #333;
+        }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: inset 4px 4px 6px #a3b1c6,
+                        inset -4px -4px 6px #ffffff;
+            background: #e0e5ec;
+        }
+
+        .btn-neomorph {
+            width: 100%;
+            border-radius: 12px;
+            border: none;
+            background: #e0e5ec;
+            color: #333;
+            font-weight: 500;
+            padding: 10px;
+            box-shadow: 6px 6px 10px #a3b1c6, -6px -6px 10px #ffffff;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-neomorph:hover {
+            box-shadow: inset 6px 6px 10px #039BE5, inset -6px -6px 10px #039BE5
+        }
+
+        .text-danger {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        a {
+            color: #333;
+            text-decoration: underline;
+        }
+
+        .logo-circle {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px auto;
+            background: #e0e5ec;
+            border-radius: 50%;
+            box-shadow: 6px 6px 10px #a3b1c6, -6px -6px 10px #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 28px;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
-<h2>Login Page</h2>
-<form th:action="@{/login}" method="post">
-    <input type="text" name="username" placeholder="Username" required />
-    <input type="password" name="password" placeholder="Password" required />
-    <button type="submit">Login</button>
-</form>
+    <div class="login-card">
+        <div class="logo-circle">
+           <img th:src="@{/images/imochalogo.png}"  style="width: 50px; height: 50px; border-radius: 50%;">
+        </div>
 
-<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+        <h2>HRMS Login</h2>
+
+        <form th:action="@{/login}" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" id="username" placeholder="Enter username" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Enter password" required>
+            </div>
+
+            <button type="submit" class="btn-neomorph mt-3">Login</button>
+
+            <p th:if="${error}" th:text="${error}" class="text-danger"></p>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

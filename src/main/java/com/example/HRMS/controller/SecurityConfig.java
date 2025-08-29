@@ -18,7 +18,7 @@ public class SecurityConfig {
                .requestMatchers("/users/**", "/departments/**").hasRole("ADMIN")
                 .requestMatchers("/leave/list").hasRole("MANAGER")
                 .requestMatchers("/leave/apply", "/leave/my").hasRole("EMPLOYEE")
-                .requestMatchers("/dashboard", "/login", "/logout").permitAll()
+                .requestMatchers("/dashboard", "/login", "/logout", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin().disable();

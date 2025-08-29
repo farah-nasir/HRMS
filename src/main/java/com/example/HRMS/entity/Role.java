@@ -11,10 +11,12 @@ public class Role {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String name;  // e.g. ROLE_ADMIN, ROLE_MANAGER, ROLE_EMPLOYEE
+    private String name; 
 
     // --- Constructors ---
-    public Role() {}
+    public Role() {
+        
+    }
     public Role(String name) {
         this.name = name;
     }

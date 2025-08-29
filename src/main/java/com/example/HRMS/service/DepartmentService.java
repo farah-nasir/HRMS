@@ -28,6 +28,14 @@ public class DepartmentService {
     }
 
     public void deleteDepartment(Long id) {
-        departmentRepository.deleteById(id);
+         Department dept = departmentRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid department Id:" + id));
+        dept.setStatus("Inactive");
+        departmentRepository.save(dept);
     }
+
+    public List<Department> getActiveDepartments() {
+        return departmentRepository.findByStatus("Active");
+    }
+
 }

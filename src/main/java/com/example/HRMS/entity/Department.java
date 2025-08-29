@@ -1,7 +1,9 @@
 package com.example.HRMS.entity;
 
 import jakarta.persistence.*;
-
+import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @Table(name = "departments")
 
@@ -15,10 +17,19 @@ public class Department {
     private String name;
     private String description;
 
-    // Default constructor
+    @Column(name = "status", nullable = false)
+    private String status = "Active"; //default value
+
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)  
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at", insertable = false) 
+    private LocalDateTime updatedAt;
+
     public Department() {}
 
-    // All args constructor
     public Department(Long id, String name, String description) {
         this.id = id;
         this.name = name;
@@ -45,8 +56,16 @@ public class Department {
         return description; 
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     public void setDescription(String description) { 
         this.description = description; 
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
 

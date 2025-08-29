@@ -26,7 +26,7 @@ public class AuthController {
 
    @GetMapping("/login")
     public String loginPage(Model model) {
-        return "login"; // looks for login.html in templates/
+        return "login";
     }
 
     @PostMapping("/login")
@@ -39,7 +39,7 @@ public class AuthController {
         if (user != null) {
             // 1. Load authorities (ROLE_ADMIN, ROLE_MANAGER, etc.)
             List<GrantedAuthority> authorities = List.of(
-                new SimpleGrantedAuthority(user.getRole().getName()) // e.g. "ROLE_ADMIN"
+                new SimpleGrantedAuthority(user.getRole().getName())
             );
 
             // 2. Create UserDetails-like object
@@ -92,35 +92,6 @@ public class AuthController {
 
         return "dashboard";
     }
-
-    // @GetMapping("/users")
-    // public String usersPage(Model model) {
-    //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    //     if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
-    //         return "redirect:/login";
-    //     }
-
-    //     // Restrict access to admins only
-    //     boolean isAdmin = authentication.getAuthorities().stream()
-    //             .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
-
-    //     if (!isAdmin) {
-    //         return "error/403"; //TODO Make templates/error/403.html
-    //     }
-
-    //     List<User> users = userService.getAllUsers();
-    //     model.addAttribute("users", users);
-
-    //     return "users";
-    // }
-
-    // @GetMapping("/departments")
-    // public String departmentsPage(Model model) {
-    //     // You can add attributes to the model if needed
-    //     // e.g., model.addAttribute("departments", departmentService.getAllDepartments());
-    //     return "departments"; // maps to templates/departments.html
-    // }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {

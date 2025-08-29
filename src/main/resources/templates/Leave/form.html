@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>HRMS</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>HRMS</title>
     <style>
         body {
             background: #e0e5ec;
@@ -49,10 +50,9 @@
             color: #555;
         }
 
-
-        input, select {
-            width: 100%;           
-            max-width: 400px;     
+        input, select{
+            width: 100%;          
+            max-width: 400px;   
             padding: 10px;
             border-radius: 12px;
             border: none;
@@ -64,6 +64,26 @@
 
 
         input:focus, select:focus {
+            outline: none;
+            box-shadow: inset 3px 3px 6px #b8bbc1,
+                        inset -3px -3px 6px #ffffff;
+        }
+
+        textarea {
+            width: 100%;
+    
+            height: 150px;      
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            background: #e0e5ec;
+            box-shadow: inset 5px 5px 10px #b8bbc1,
+                        inset -5px -5px 10px #ffffff;
+            font-size: 14px;
+            resize: vertical;  
+        }
+
+        textarea:focus {
             outline: none;
             box-shadow: inset 3px 3px 6px #b8bbc1,
                         inset -3px -3px 6px #ffffff;
@@ -114,7 +134,7 @@
     </style>
 </head>
 <body>
-    <!-- Top Navigation -->
+     <!-- Top Navigation -->
     <nav class="navbar navbar-expand-lg navbar-custom px-5">
         <a class="navbar-brand" href="#">HRMS Dashboard</a>
         <div class="ms-auto d-flex align-items-center">
@@ -124,63 +144,34 @@
             </a>
         </div>
     </nav>
-    <h2 th:text="${user.id == null} ? 'Add New User' : 'Edit User'"></h2>
+    <h2>New Application</h2>
     <div class="form-container">
-        <form th:action="@{/User}" th:object="${user}" method="post">
-            <input type="hidden" th:field="*{id}" />
+        <form th:action="@{/Leave}" th:object="${leave}" method="post">
+        <input type="hidden" th:field="*{id}" />
 
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" th:field="*{username}" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" th:field="*{password}" 
-                        th:placeholder="${user.id != null} ? 'Leave empty to keep current password' : ''" />
-                </div>
-
-                <div class="form-group">
-                    <label for="fullName">Full Name:</label>
-                    <input type="text" th:field="*{fullName}" placeholder="Enter full name" required />
-                </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" th:field="*{email}" placeholder="Enter email" required />   
-                </div>
-
-                <div class="form-group">
-                    <label for="role">Role:</label>
-                    <select th:field="*{role.id}">
-                        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="department">Department:</label>
-                    <select th:field="*{department.id}">
-                        <option th:each="dept : ${departments}"
-                                th:value="${dept.id}"
-                                th:text="${dept.name}"
-                                th:selected="${user.department != null} ? ${dept.id} == ${user.department.id} : false">
-                        </option>
-                    </select>
-                </div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Start Date:</label>
+                <input type="date" th:field="*{startDate}" required /><br/>
             </div>
-
-            <div class="text-center mt-3">
-                <button type="submit" >Save</button>
+            <div class="form-group">
+                <label>End Date:</label>
+                <input type="date" th:field="*{endDate}" required /><br/>
             </div>
-            <div class="text-center mt-3">
-                <a th:href="@{/User}" style="text-decoration: none; cursor: pointer; color:#039BE5 ;">
-                    Back to List
-                </a>
+        </div>
+          <div class="form-group">
+                <label>Reason:</label>
+                <textarea th:field="*{reason}" required></textarea><br/>
             </div>
-
-
-        </form>
-       
-    </div>
+        <div class="text-center mt-3">
+            <button type="submit" >Save</button>
+        </div>
+        <div class="text-center mt-3">
+            <a th:href="@{/Leave}" style="text-decoration: none; cursor: pointer; color:#039BE5 ;">
+                Back to List
+            </a>
+        </div>
+    </form>
+</div>
 </body>
 </html>

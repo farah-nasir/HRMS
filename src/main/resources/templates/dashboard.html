@@ -1,41 +1,98 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Dashboard</title>
+    <title>HRMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #e0e5ec;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Navbar */
+        .navbar-custom {
+            background: #e0e5ec;
+            box-shadow: 3px 3px 8px #a3b1c6, -3px -3px 8px #ffffff;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .navbar-custom .navbar-brand,
+        .navbar-custom .navbar-text,
+        .navbar-custom .btn {
+            color: #333;
+        }
+
+        .neomorph-card {
+            background: #e0e5ec;
+            border-radius: 20px;
+            box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 16px #ffffff;
+            padding: 30px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .neomorph-card:hover {
+            box-shadow: inset 5px 5px 10px #a3b1c6, inset -5px -5px 10px #ffffff;
+        }
+
+        .neomorph-card a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .logout-btn:hover {
+            background-color: #e03e3e;
+        }
+    </style>
 </head>
 <body>
-    <h1 th:text="'Welcome, ' + ${username}"></h1>
-    <p th:text="'Your role: ' + ${role}"></p>
-    
-   <div th:switch="${role}">
-        <!-- Admin -->
-        <div th:case="'ROLE_ADMIN'">
-            <h3>Admin Dashboard</h3>
-            <a href="/Department">Department Management</a><br>
-            <a href="/User">User Maintenance</a>
+
+<!-- Top Navigation -->
+<nav class="navbar navbar-expand-lg navbar-custom px-5">
+    <a class="navbar-brand" href="#">HRMS Dashboard</a>
+    <div class="ms-auto d-flex align-items-center">
+        <span class="navbar-text me-3" th:text="'Hello, ' + ${username}"></span>
+        <a th:href="@{/logout}">
+            <button type="button" class="btn btn-sm btn-danger text-white">Logout</button>
+        </a>
+    </div>
+</nav>
+
+<div class="container">
+     <div class="row g-4 mt-4 justify-content-center">
+
+        <!-- Admin Options -->
+        <div class="col-md-4" th:if="${role == 'ROLE_ADMIN'}">
+            <a th:href="@{/Department}" style="text-decoration: none; color:#333;">
+                <div class="neomorph-card">
+                    <h5>Department Maintenance</h5>
+                </div>
+            </a>
+        </div>
+       <div class="col-md-4" th:if="${role == 'ROLE_ADMIN'}">
+            <a th:href="@{/User}" style="text-decoration: none; color:#333;">
+                <div class="neomorph-card">
+                    <h5>User Maintenance</h5>
+                </div>
+            </a>
         </div>
 
-        <!-- Manager -->
-        <div th:case="'ROLE_MANAGER'">
-            <h3>Manager Dashboard</h3>
-            <a href="/leave/list">Leave Application Listing</a>
-        </div>
-
-        <!-- Employee -->
-        <div th:case="'ROLE_EMPLOYEE'">
-            <h3>Employee Dashboard</h3>
-            <a href="/leave/apply">Apply for Leave</a><br>
-            <a href="/leave/my">My Leave Applications</a>
-        </div>
-
-        <!-- Default (if role not matched) -->
-        <div th:case="*">
-            <p>No role assigned</p>
+        <!-- Manager and employee Options -->
+        <div class="col-md-4" th:if="${role == 'ROLE_MANAGER' or role == 'ROLE_EMPLOYEE'}">
+            <a th:href="@{/Leave}" style="text-decoration: none; color:#333;">
+                <div class="neomorph-card">
+                    <h5>Leave Application</h5>
+                </div>
+            </a>
         </div>
     </div>
+</div>
 
-    <a th:href="@{/logout}">
-        <button style="background-color:red; color:white;">Logout</button>
-    </a>
 </body>
 </html>
