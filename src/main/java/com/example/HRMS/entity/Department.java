@@ -28,6 +28,11 @@ public class Department {
     @Column(name = "updated_at", insertable = false) 
     private LocalDateTime updatedAt;
 
+    @UpdateTimestamp  // auto-update every time entity is updated
+    @Column(name = "created_dt")
+    private LocalDateTime createdDt;
+    
+
     public Department() {}
 
     public Department(Long id, String name, String description) {
@@ -67,5 +72,31 @@ public class Department {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public LocalDateTime getCreatedAt() {
+    return createdAt;
+}
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+
+    public LocalDateTime getCreatedDt() { 
+        return createdDt; 
+    }
+
+    public void setCreatedDt(LocalDateTime createdDt) { 
+        this.createdDt = createdDt; 
+    }
+
 }
 
