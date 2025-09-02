@@ -30,9 +30,9 @@ public class LeaveService {
     //     return leaveRepository.findByEmployee(employee);
     // }
 
-    public List<Leave> getLeavesByManager(Long managerId) {
-        return leaveRepository.findByManagerId(managerId);
-    }
+    // public List<Leave> getLeavesByManager(Long managerId) {
+    //     return leaveRepository.findByManagerId(managerId);
+    // }
 
     public Optional<Leave> getLeaveById(Long id) {
         return leaveRepository.findById(id);
@@ -46,10 +46,28 @@ public class LeaveService {
         leaveRepository.deleteById(id);
     }
 
-    public Page<Leave> getLeavesForCurrentUser(User user, int page, int size) {
+    public Page<Leave> getLeavesForCurrentUser(User currentUser, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return leaveRepository.findByEmployee(user, pageable);
+
+        String roleName = currentUser.getRole().getName();
+
+        if ("ROLE_EMPLOYEE".equals(roleName)) {
+            // Employee: only their own leaves
+            return leaveRepository.findByEmployeeId(currentUser.getId(), pageable);
+
+        } else if ("ROLE_MANAGER".equals(roleName)) {
+            // Manager: see all leave applications for employees in the same department
+            Long departmentId = currentUser.getDepartment().getId();
+            return leaveRepository.findByDepartmentId(departmentId, pageable);
+
+        } else if ("ROLE_ADMIN".equals(roleName)) {
+            // Admin: see everything
+            return leaveRepository.findAll(pageable);
+        }
+
+        return Page.empty(pageable);
     }
+
 
     public void updateStatus(Long id, String status) {
         Leave leave = leaveRepository.findById(id)
@@ -65,11 +83,14 @@ public class LeaveService {
         leave.setStatus("APPEALED");
         leaveRepository.save(leave);
     }
-    // new method that return Page<Leave>
+
     public Page <Leave> getPaginatedLeaves(int pageNo, int pageSize){
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         return leaveRepository.findAll(pageable);
     }
 
-
+    public Page<Leave> getAllLeaves(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return leaveRepository.findAll(pageable);
+    }
 }

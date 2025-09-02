@@ -9,11 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 
 public interface LeaveRepository extends JpaRepository<Leave, Long> {
-    // Find leaves by employee ID
-    List<Leave> findByEmployeeId(Long employeeId);
-    // Find leaves by manager ID
-    List<Leave> findByManagerId(Long managerId);
-    // List<Leave> findByEmployee(User employee);
-    List<Leave> findByManager(User manager);
-    Page<Leave> findByEmployee(User employee, Pageable pageable);
+    // Page<Leave> findByEmployee(User employee, Pageable pageable);
+    Page<Leave> findByEmployeeId(Long employeeId, Pageable pageable);
+    Page<Leave> findByDepartmentId(Long departmentId, Pageable pageable);
 }

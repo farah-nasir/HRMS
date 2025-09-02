@@ -38,6 +38,7 @@ public class DepartmentController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", departmentPage.getTotalPages());
         model.addAttribute("pageSize", size);
+        model.addAttribute("totalItems", departmentPage.getTotalElements()); 
 
         return "Department/list";
     }

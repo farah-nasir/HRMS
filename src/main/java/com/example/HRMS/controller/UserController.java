@@ -50,6 +50,7 @@ public class UserController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", userPage.getTotalPages());
         model.addAttribute("pageSize", size);
+        model.addAttribute("totalItems", userPage.getTotalElements()); 
         return "User/list";
     }
 
@@ -62,7 +63,6 @@ public class UserController {
         model.addAttribute("username", userDetails.getUsername());
         return "User/form";
     }
-
 
     // Save user
     @PostMapping
@@ -111,7 +111,6 @@ public class UserController {
         System.out.println("User saved successfully!");
         return "redirect:/User";
     }
-
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {

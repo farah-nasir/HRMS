@@ -89,7 +89,6 @@ public class Department {
         this.updatedAt = updatedAt;
     }
 
-
     public LocalDateTime getCreatedDt() { 
         return createdDt; 
     }

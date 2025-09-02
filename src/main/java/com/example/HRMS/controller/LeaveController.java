@@ -28,21 +28,30 @@ public class LeaveController {
     }
 
     // List leave applications
-   @GetMapping
+    @GetMapping
     public String listLeaves(Model model,
                             @RequestParam(defaultValue = "0") int page,
                             @RequestParam(defaultValue = "5") int size) {
         User currentUser = userService.getCurrentUser();
-        Page<Leave> leavePage = leaveService.getLeavesForCurrentUser(currentUser, page, size);
+        Page<Leave> leavePage;
+
+        // Check role
+        Long roleId = currentUser.getRole().getId();
+        if (roleId == 1L) { // Admin
+            leavePage = leaveService.getAllLeaves(page, size);
+        } else { // Manager or Employee
+            leavePage = leaveService.getLeavesForCurrentUser(currentUser, page, size);
+        }
 
         model.addAttribute("leaveApplications", leavePage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", leavePage.getTotalPages());
-        model.addAttribute("roleId", currentUser.getRole().getId());
+        model.addAttribute("pageSize", size);
+        model.addAttribute("roleId", roleId);
+        model.addAttribute("totalItems", leavePage.getTotalElements());
 
         return "Leave/list";
     }
-
 
     // Show leave application form
     @GetMapping("/new")
