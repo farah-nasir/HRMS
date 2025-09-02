@@ -17,6 +17,9 @@ import com.example.HRMS.repository.UserRepository;
 import com.example.HRMS.service.DepartmentService;
 import com.example.HRMS.service.UserService;
 import com.example.HRMS.entity.Role;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 
 @Controller
 @RequestMapping("/User")
@@ -39,9 +42,14 @@ public class UserController {
 
     // List all users
     @GetMapping
-    public String listUsers(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        model.addAttribute("users", userService.getAllUsers());
-        model.addAttribute("username", userDetails.getUsername());
+    public String listUsers(Model model, @AuthenticationPrincipal UserDetails userDetails,
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "5") int size) {
+        Page<User> userPage = userService.getPaginatedUsers(page, size);
+        model.addAttribute("users", userPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", userPage.getTotalPages());
+        model.addAttribute("pageSize", size);
         return "User/list";
     }
 

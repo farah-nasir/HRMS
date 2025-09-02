@@ -8,6 +8,7 @@ import com.example.HRMS.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
 
 import java.security.Principal;
 import java.util.List;
@@ -27,14 +28,21 @@ public class LeaveController {
     }
 
     // List leave applications
-    @GetMapping
-    public String listLeaves(Model model) {
+   @GetMapping
+    public String listLeaves(Model model,
+                            @RequestParam(defaultValue = "0") int page,
+                            @RequestParam(defaultValue = "5") int size) {
         User currentUser = userService.getCurrentUser();
-        List<Leave> leaves = leaveService.getLeavesForCurrentUser(currentUser);
-        model.addAttribute("leaveApplications", leaves);
+        Page<Leave> leavePage = leaveService.getLeavesForCurrentUser(currentUser, page, size);
+
+        model.addAttribute("leaveApplications", leavePage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", leavePage.getTotalPages());
         model.addAttribute("roleId", currentUser.getRole().getId());
+
         return "Leave/list";
     }
+
 
     // Show leave application form
     @GetMapping("/new")

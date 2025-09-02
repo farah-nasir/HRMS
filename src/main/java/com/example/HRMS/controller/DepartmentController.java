@@ -8,7 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 @Controller
 @RequestMapping("/Department")
@@ -27,9 +29,16 @@ public class DepartmentController {
     // List all departments
     @GetMapping
     public String listDepartments(Model model, 
-            @AuthenticationPrincipal User userDetails ) {
-        model.addAttribute("departments", departmentRepository.findByStatus("Active"));
-        model.addAttribute("username", userDetails.getUsername()); // Now this works
+            @AuthenticationPrincipal User userDetails,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size ) {
+        model.addAttribute("username", userDetails.getUsername());
+        Page<Department> departmentPage = departmentService.getPaginatedActiveDepartments(page, size);
+        model.addAttribute("departments", departmentPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", departmentPage.getTotalPages());
+        model.addAttribute("pageSize", size);
+
         return "Department/list";
     }
 

@@ -2,9 +2,11 @@ package com.example.HRMS.service;
 import com.example.HRMS.entity.Department;
 import com.example.HRMS.repository.DepartmentRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 @Service
 public class DepartmentService {
@@ -36,6 +38,16 @@ public class DepartmentService {
 
     public List<Department> getActiveDepartments() {
         return departmentRepository.findByStatus("Active");
+    }
+
+    public Page<Department> getPaginatedDepartments(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return departmentRepository.findAll(pageable);
+    }
+
+    public Page<Department> getPaginatedActiveDepartments(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return departmentRepository.findByStatus("Active", pageable);
     }
 
 }

@@ -2,12 +2,16 @@ package com.example.HRMS.service;
 
 import com.example.HRMS.entity.Leave;
 import com.example.HRMS.repository.LeaveRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.example.HRMS.entity.User;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 @Service
 public class LeaveService {
@@ -22,9 +26,9 @@ public class LeaveService {
         return leaveRepository.findAll();
     }
 
-    public List<Leave> getLeavesByEmployee(User employee) {
-        return leaveRepository.findByEmployee(employee);
-    }
+    // public List<Leave> getLeavesByEmployee(User employee) {
+    //     return leaveRepository.findByEmployee(employee);
+    // }
 
     public List<Leave> getLeavesByManager(Long managerId) {
         return leaveRepository.findByManagerId(managerId);
@@ -42,15 +46,9 @@ public class LeaveService {
         leaveRepository.deleteById(id);
     }
 
-    public List<Leave> getLeavesForCurrentUser(User currentUser) {
-        if (currentUser.getRole().getName().equals("ROLE_MANAGER")) {
-            // Manager: show leaves where manager_id = currentUser.id
-            return leaveRepository.findByManager(currentUser);
-        } else if (currentUser.getRole().getName().equals("ROLE_EMPLOYEE")) {
-            // Employee: show leaves where employee_id = currentUser.id
-            return leaveRepository.findByEmployee(currentUser);
-        }
-        return Collections.emptyList();
+    public Page<Leave> getLeavesForCurrentUser(User user, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return leaveRepository.findByEmployee(user, pageable);
     }
 
     public void updateStatus(Long id, String status) {
@@ -67,7 +65,11 @@ public class LeaveService {
         leave.setStatus("APPEALED");
         leaveRepository.save(leave);
     }
-    
+    // new method that return Page<Leave>
+    public Page <Leave> getPaginatedLeaves(int pageNo, int pageSize){
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        return leaveRepository.findAll(pageable);
+    }
 
 
 }
