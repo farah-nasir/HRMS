@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 @Controller
 @RequestMapping("/Department")
@@ -31,14 +32,27 @@ public class DepartmentController {
     public String listDepartments(Model model, 
             @AuthenticationPrincipal User userDetails,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size ) {
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir) {
         model.addAttribute("username", userDetails.getUsername());
-        Page<Department> departmentPage = departmentService.getPaginatedActiveDepartments(page, size);
+        // Build sorting object
+        Sort sort = sortDir.equalsIgnoreCase("asc") ? 
+        Sort.by(sortBy).ascending() : 
+        Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Department> departmentPage = departmentService.getPaginatedActiveDepartments(page, size, sortBy, sortDir);
         model.addAttribute("departments", departmentPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", departmentPage.getTotalPages());
         model.addAttribute("pageSize", size);
         model.addAttribute("totalItems", departmentPage.getTotalElements()); 
+
+        // keep sorting info
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
         return "Department/list";
     }

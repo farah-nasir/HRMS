@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 @Service
 public class DepartmentService {
@@ -45,8 +46,11 @@ public class DepartmentService {
         return departmentRepository.findAll(pageable);
     }
 
-    public Page<Department> getPaginatedActiveDepartments(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+   public Page<Department> getPaginatedActiveDepartments(int page, int size, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
         return departmentRepository.findByStatus("Active", pageable);
     }
 

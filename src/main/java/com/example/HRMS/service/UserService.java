@@ -12,7 +12,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
-
+import org.springframework.data.domain.Sort;
 @Service
 public class UserService {
 
@@ -62,8 +62,12 @@ public class UserService {
     //     return userRepository.findAll();
     // }
 
-    public Page<User> getPaginatedUsers(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<User> getPaginatedUsers(int page, int size, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) 
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
         return userRepository.findAll(pageable);
     }
 
@@ -81,5 +85,9 @@ public class UserService {
 
     public List<User> getManagers() {
         return userRepository.findByRole_Id(2L); // 2 = Manager role_id
+    }
+
+    public boolean isUsernameTaken(String username) {
+        return userRepository.existsByUsername(username);
     }
 }

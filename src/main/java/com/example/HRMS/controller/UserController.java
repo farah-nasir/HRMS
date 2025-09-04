@@ -42,15 +42,24 @@ public class UserController {
 
     // List all users
     @GetMapping
-    public String listUsers(Model model, @AuthenticationPrincipal UserDetails userDetails,
-    @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "5") int size) {
-        Page<User> userPage = userService.getPaginatedUsers(page, size);
+    public String listUsers(Model model,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size,
+        @RequestParam(defaultValue = "id") String sortBy,
+        @RequestParam(defaultValue = "asc") String sortDir) {
+
+        Page<User> userPage = userService.getPaginatedUsers(page, size, sortBy, sortDir);
         model.addAttribute("users", userPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", userPage.getTotalPages());
         model.addAttribute("pageSize", size);
         model.addAttribute("totalItems", userPage.getTotalElements()); 
+
+        // Sorting info
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
         return "User/list";
     }
 
@@ -65,8 +74,8 @@ public class UserController {
     }
 
     // Save user
-    @PostMapping
-    public String saveUser(@ModelAttribute User user) {
+   @PostMapping
+    public String saveUser(@ModelAttribute User user, Model model) {
         System.out.println("---- Saving User ----");
         System.out.println("ID: " + user.getId());
         System.out.println("Username: " + user.getUsername());
@@ -82,6 +91,19 @@ public class UserController {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Role ID"));
         Department dept = departmentService.getDepartmentById(user.getDepartment().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Department ID"));
+
+        // 🔍 Check for duplicate username (only when creating a new user)
+        if (user.getId() == null && userService.isUsernameTaken(user.getUsername())) {
+            model.addAttribute("error", "Username already taken!");
+            model.addAttribute("user", user);
+
+            // repopulate dropdowns so Thymeleaf form still works
+            model.addAttribute("roles", roleService.getAllRoles());
+            model.addAttribute("departments", departmentService.getActiveDepartments());
+            model.addAttribute("managers", userService.getManagers());
+
+            return "User/form"; // stay on form page
+        }
 
         if (user.getId() != null) {
             // Editing existing user
@@ -111,6 +133,7 @@ public class UserController {
         System.out.println("User saved successfully!");
         return "redirect:/User";
     }
+
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {

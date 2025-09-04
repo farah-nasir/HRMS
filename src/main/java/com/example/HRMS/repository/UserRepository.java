@@ -12,6 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findByRole_Id(Long roleId, Pageable pageable); 
     // Find a user by id and department id
     Optional<User> findByDepartment_IdAndRole_Id(Long departmentId, Long roleId);
+    boolean existsByUsername(String username); 
     
 }
 
