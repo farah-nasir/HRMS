@@ -42,7 +42,7 @@ public class AuthController {
                 new SimpleGrantedAuthority(user.getRole().getName())
             );
 
-            // 2. Create UserDetails-like object
+            // 2. Create spring security user object
             org.springframework.security.core.userdetails.User userDetails =
                     new org.springframework.security.core.userdetails.User(
                             user.getUsername(),
@@ -59,7 +59,7 @@ public class AuthController {
             context.setAuthentication(auth);
             SecurityContextHolder.setContext(context);
 
-            // 5. Persist it in session so it survives redirects
+            // 5. Store the security info into the HTTP session
             HttpSession session = request.getSession(true);
             session.setAttribute(
                     HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
